@@ -53,9 +53,18 @@ export default function Index() {
                 <h1 className="font-display text-4xl md:text-6xl text-[#e8e0c8] leading-tight mb-4">
                   SPAWN<br /><span className="text-[#5a9a3c]">SHOP</span>
                 </h1>
-                <p className="text-[#8a8a8a] text-lg mb-8 max-w-md">
+                <p className="text-[#8a8a8a] text-lg mb-4 max-w-md">
                   Магазин спавнеров для Minecraft-сервера. Быстрая доставка, честные цены, гарантия качества.
                 </p>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[#5a9a3c] text-sm">⚡</span>
+                  <span className="text-[#e8e0c8] text-sm">Спавнер выдаётся лично при заходе на сервер</span>
+                </div>
+                <div className="flex items-center gap-2 mb-8">
+                  <span className="text-[#f5c542] text-sm">🌐</span>
+                  <span className="text-[#8a8a8a] text-sm">IP сервера:</span>
+                  <code className="text-[#f5c542] font-mono text-sm bg-[#141a14] border border-[#3c3c3c] px-2 py-0.5 select-all">mc.solomongrief.fun</code>
+                </div>
                 <div className="flex flex-wrap gap-3">
                   <button onClick={() => setPage('catalog')} className="mc-btn bg-[#5a9a3c] text-white px-8 py-3 font-semibold text-sm uppercase tracking-wide">
                     Смотреть каталог
