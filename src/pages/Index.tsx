@@ -326,6 +326,66 @@ export default function Index() {
           </div>
         )}
 
+        {/* CART */}
+        {page === 'cart' && (
+          <div className="max-w-2xl">
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold mb-1">Корзина</h1>
+              <p className="text-[#8a8a8a]">{cartItems.length > 0 ? `${cartItems.length} товар(а)` : 'Корзина пуста'}</p>
+            </div>
+            {cartItems.length === 0 ? (
+              <div className="text-center py-20 text-[#8a8a8a]">
+                <div className="text-5xl mb-3">🛒</div>
+                <p className="mb-4">В корзине пока ничего нет</p>
+                <button onClick={() => setPage('catalog')} className="mc-btn bg-[#5a9a3c] text-white px-6 py-2 font-semibold text-sm uppercase tracking-wide">
+                  Перейти в каталог
+                </button>
+              </div>
+            ) : (
+              <div>
+                <div className="space-y-3 mb-6">
+                  {SPAWNERS.filter(s => cartItems.includes(s.id)).map((s, i) => (
+                    <div key={s.id} className="mc-card p-4 flex items-center justify-between animate-fade-in-up" style={{ animationDelay: `${i * 0.07}s`, opacity: 0 }}>
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-[#141a14] border-2 border-[#3c3c3c] flex items-center justify-center text-2xl flex-shrink-0">
+                          {s.image ? <img src={s.image} alt={s.name} className="w-full h-full object-cover" /> : s.mob}
+                        </div>
+                        <div>
+                          <p className="font-semibold">{s.name}</p>
+                          <p className="text-xs text-[#8a8a8a]">{s.rarityLabel}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className="font-bold text-[#5a9a3c]">{s.price} ₽</span>
+                        <button
+                          onClick={() => {
+                            setCartItems(prev => prev.filter(id => id !== s.id));
+                            setCartCount(c => c - 1);
+                          }}
+                          className="text-[#8a8a8a] hover:text-red-400 transition-colors"
+                        >
+                          <Icon name="X" size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mc-card p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-[#8a8a8a]">Итого:</span>
+                    <span className="text-2xl font-bold text-[#5a9a3c]">
+                      {SPAWNERS.filter(s => cartItems.includes(s.id)).reduce((sum, s) => sum + s.price, 0)} ₽
+                    </span>
+                  </div>
+                  <button className="mc-btn w-full bg-[#5a9a3c] text-white py-3 font-semibold text-sm uppercase tracking-wide">
+                    Оформить заказ
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
       </main>
 
       {/* FOOTER */}

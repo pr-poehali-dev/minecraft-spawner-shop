@@ -42,7 +42,8 @@ export default function Navbar({ page, cartCount, setPage }: NavbarProps) {
             <Icon name="User" size={14} />
             <span className="hidden sm:inline">Кабинет</span>
           </button>
-          <button className="relative flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border-2 border-[#3c3c3c] text-[#8a8a8a] hover:border-[#f5c542] hover:text-[#f5c542] transition-all">
+          <button onClick={() => setPage('cart')}
+            className={`relative flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border-2 transition-all ${page === 'cart' ? 'border-[#f5c542] bg-[#f5c542]/20 text-[#f5c542]' : 'border-[#3c3c3c] text-[#8a8a8a] hover:border-[#f5c542] hover:text-[#f5c542]'}`}>
             <Icon name="ShoppingCart" size={14} />
             {cartCount > 0 && (
               <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#f5c542] text-black text-xs font-bold flex items-center justify-center">{cartCount}</span>

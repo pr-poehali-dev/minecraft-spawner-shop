@@ -1,4 +1,4 @@
-export type Page = 'home' | 'catalog' | 'about' | 'reviews' | 'contacts' | 'account';
+export type Page = 'home' | 'catalog' | 'about' | 'reviews' | 'contacts' | 'account' | 'cart';
 
 export const SPAWNERS = [
   {
