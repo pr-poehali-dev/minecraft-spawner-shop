@@ -1,186 +1,15 @@
 import { useState } from 'react';
 import Icon from '@/components/ui/icon';
-
-type Page = 'home' | 'catalog' | 'about' | 'reviews' | 'contacts' | 'account';
-
-const SPAWNERS = [
-  {
-    id: 1,
-    name: 'Спавнер Зомби',
-    mob: '🧟',
-    price: 149,
-    oldPrice: 220,
-    rarity: 'common',
-    rarityLabel: 'Обычный',
-    description: 'Классический спавнер зомби. Идеален для фарм-механик и получения ресурсов.',
-    drops: ['Гнилое мясо', 'Железо', 'Картофель'],
-    image: 'https://cdn.poehali.dev/projects/f1f6be35-ef21-4d17-913c-d15aa73232ed/files/77cdca94-61b3-4db6-8042-5b5e6c7d0db0.jpg',
-    inStock: true,
-  },
-  {
-    id: 2,
-    name: 'Спавнер Паука',
-    mob: '🕷️',
-    price: 189,
-    oldPrice: null,
-    rarity: 'common',
-    rarityLabel: 'Обычный',
-    description: 'Спавнер паука для добычи нитей и паучьих глаз.',
-    drops: ['Нить', 'Паучий глаз'],
-    image: 'https://cdn.poehali.dev/projects/f1f6be35-ef21-4d17-913c-d15aa73232ed/files/c996b3ee-47bd-42df-88eb-2cd5685bc1d2.jpg',
-    inStock: true,
-  },
-  {
-    id: 3,
-    name: 'Спавнер Ифрита',
-    mob: '🔥',
-    price: 599,
-    oldPrice: 799,
-    rarity: 'rare',
-    rarityLabel: 'Редкий',
-    description: 'Огненный спавнер из нижнего мира. Незаменим для крафта огненных палочек.',
-    drops: ['Огненная палочка', 'Огненный заряд'],
-    image: 'https://cdn.poehali.dev/projects/f1f6be35-ef21-4d17-913c-d15aa73232ed/files/72ca7aef-3981-4995-a4bd-ee08ecedc3a8.jpg',
-    inStock: true,
-  },
-  {
-    id: 4,
-    name: 'Спавнер Скелета',
-    mob: '💀',
-    price: 199,
-    oldPrice: null,
-    rarity: 'common',
-    rarityLabel: 'Обычный',
-    description: 'Спавнер скелета — лучший источник стрел и костей для костной муки.',
-    drops: ['Кости', 'Стрелы', 'Луки'],
-    image: null,
-    inStock: true,
-  },
-  {
-    id: 5,
-    name: 'Спавнер Эндермена',
-    mob: '👁️',
-    price: 899,
-    oldPrice: null,
-    rarity: 'epic',
-    rarityLabel: 'Эпический',
-    description: 'Эндермен-спавнер для фарма жемчуга Края. Редкий и очень ценный.',
-    drops: ['Жемчуг Края', 'Опыт'],
-    image: null,
-    inStock: false,
-  },
-  {
-    id: 6,
-    name: 'Спавнер Крипера',
-    mob: '💚',
-    price: 349,
-    oldPrice: 450,
-    rarity: 'uncommon',
-    rarityLabel: 'Необычный',
-    description: 'Спавнер крипера для добычи пороха. Осторожно — взрывоопасно!',
-    drops: ['Порох', 'Музыкальные диски'],
-    image: null,
-    inStock: true,
-  },
-];
-
-const ORDERS = [
-  { id: '#MC-4821', date: '24 мая 2026', item: 'Спавнер Зомби', statusLabel: 'Доставлен', price: 149 },
-  { id: '#MC-4799', date: '18 мая 2026', item: 'Спавнер Ифрита', statusLabel: 'Доставлен', price: 599 },
-  { id: '#MC-4701', date: '5 мая 2026', item: 'Спавнер Паука', statusLabel: 'Доставлен', price: 189 },
-];
-
-const REVIEWS = [
-  { name: 'Алексей_Геймер', avatar: '🧙', rating: 5, date: '22 мая 2026', text: 'Купил спавнер ифрита — всё пришло мгновенно, работает отлично. Ребята знают своё дело!', item: 'Спавнер Ифрита' },
-  { name: 'MineQueen99', avatar: '👸', rating: 5, date: '15 мая 2026', text: 'Заказываю уже третий раз. Быстро, надёжно, без лишних вопросов. Спавнер зомби работает круглосуточно.', item: 'Спавнер Зомби' },
-  { name: 'CreeperHunter', avatar: '⚔️', rating: 4, date: '10 мая 2026', text: 'Хороший магазин, цены адекватные. Хотелось бы больше редких спавнеров в наличии.', item: 'Спавнер Крипера' },
-  { name: 'DiamondSteve', avatar: '💎', rating: 5, date: '2 мая 2026', text: 'Лучший магазин спавнеров! Поддержка ответила за 5 минут. Буду покупать ещё.', item: 'Спавнер Эндермена' },
-];
-
-const rarityColors: Record<string, string> = {
-  common: 'text-[#8a8a8a] border-[#8a8a8a]',
-  uncommon: 'text-[#5a9a3c] border-[#5a9a3c]',
-  rare: 'text-blue-400 border-blue-400',
-  epic: 'text-purple-400 border-purple-400',
-  legendary: 'text-[#f5c542] border-[#f5c542]',
-};
-
-const rarityBg: Record<string, string> = {
-  common: 'bg-[#8a8a8a]/10',
-  uncommon: 'bg-[#5a9a3c]/10',
-  rare: 'bg-blue-500/10',
-  epic: 'bg-purple-500/10',
-  legendary: 'bg-[#f5c542]/10',
-};
-
-function SpawnerCard({
-  spawner, index, onSelect, onCart, cartItems,
-}: {
-  spawner: typeof SPAWNERS[0];
-  index: number;
-  onSelect: (s: typeof SPAWNERS[0]) => void;
-  onCart: (id: number) => void;
-  cartItems: number[];
-}) {
-  const inCart = cartItems.includes(spawner.id);
-  return (
-    <div
-      className="mc-card cursor-pointer transition-all duration-200 animate-fade-in-up flex flex-col"
-      style={{ animationDelay: `${index * 0.07}s`, opacity: 0 }}
-      onClick={() => onSelect(spawner)}
-    >
-      <div className="relative h-40 bg-[#141a14] border-b-2 border-[#3c3c3c] overflow-hidden">
-        {spawner.image ? (
-          <img src={spawner.image} alt={spawner.name} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-6xl"
-            style={{ animation: 'float 3s ease-in-out infinite', animationDelay: `${index * 0.4}s` }}>
-            {spawner.mob}
-          </div>
-        )}
-        <div className="absolute top-2 left-2">
-          <span className={`text-xs px-2 py-0.5 border font-medium ${rarityColors[spawner.rarity]} ${rarityBg[spawner.rarity]}`}>
-            {spawner.rarityLabel}
-          </span>
-        </div>
-        {!spawner.inStock && (
-          <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-            <span className="text-[#8a8a8a] font-bold text-sm uppercase tracking-wider">Нет в наличии</span>
-          </div>
-        )}
-      </div>
-      <div className="p-4 flex flex-col flex-1">
-        <h3 className="font-bold mb-1">{spawner.name}</h3>
-        <p className="text-[#8a8a8a] text-xs mb-3 line-clamp-2">{spawner.description}</p>
-        <div className="flex flex-wrap gap-1 mb-4">
-          {spawner.drops.slice(0, 2).map(drop => (
-            <span key={drop} className="text-xs px-1.5 py-0.5 bg-[#141a14] border border-[#3c3c3c] text-[#8a8a8a]">{drop}</span>
-          ))}
-        </div>
-        <div className="mt-auto flex items-center justify-between">
-          <div>
-            {spawner.oldPrice && <span className="text-xs text-[#8a8a8a] line-through mr-1">{spawner.oldPrice} ₽</span>}
-            <span className="text-lg font-bold text-[#5a9a3c]">{spawner.price} ₽</span>
-          </div>
-          {spawner.inStock && (
-            <button
-              onClick={e => { e.stopPropagation(); onCart(spawner.id); }}
-              className={`mc-btn text-xs px-3 py-1.5 font-semibold transition-all ${inCart ? 'bg-[#3a6e22] text-white' : 'bg-[#5a9a3c] text-white hover:bg-[#4a8a2c]'}`}
-            >
-              {inCart ? '✓ В корзине' : '+ В корзину'}
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
+import Navbar from '@/components/Navbar';
+import SpawnerCard from '@/components/SpawnerCard';
+import SpawnerModal from '@/components/SpawnerModal';
+import { Page, SPAWNERS, ORDERS, REVIEWS, Spawner } from '@/data/shopData';
 
 export default function Index() {
   const [page, setPage] = useState<Page>('home');
   const [cartCount, setCartCount] = useState(0);
   const [filter, setFilter] = useState('all');
-  const [selectedSpawner, setSelectedSpawner] = useState<typeof SPAWNERS[0] | null>(null);
+  const [selectedSpawner, setSelectedSpawner] = useState<Spawner | null>(null);
   const [cartItems, setCartItems] = useState<number[]>([]);
 
   const addToCart = (id: number) => {
@@ -190,112 +19,20 @@ export default function Index() {
     }
   };
 
-  const navItems: { key: Page; label: string }[] = [
-    { key: 'home', label: 'Главная' },
-    { key: 'catalog', label: 'Каталог' },
-    { key: 'about', label: 'О магазине' },
-    { key: 'reviews', label: 'Отзывы' },
-    { key: 'contacts', label: 'Контакты' },
-  ];
-
   const filteredSpawners = filter === 'all' ? SPAWNERS : SPAWNERS.filter(s => s.rarity === filter);
 
   return (
     <div className="min-h-screen bg-[#141a14] font-rubik text-[#e8e0c8]">
 
-      {/* NAV */}
-      <nav className="sticky top-0 z-50 bg-[#0f150f]/95 backdrop-blur-sm border-b-2 border-[#3c3c3c]">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
-          <button onClick={() => setPage('home')} className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#5a9a3c] border-2 border-[#3a6e22] flex items-center justify-center text-sm"
-              style={{ boxShadow: 'inset 1px 1px 0 rgba(255,255,255,0.2), inset -1px -1px 0 rgba(0,0,0,0.4)' }}>
-              ⚙️
-            </div>
-            <span className="font-display text-[#5a9a3c] text-lg tracking-tight">SpawnShop</span>
-          </button>
+      <Navbar page={page} cartCount={cartCount} setPage={setPage} />
 
-          <div className="hidden md:flex items-center gap-1">
-            {navItems.map(item => (
-              <button key={item.key} onClick={() => setPage(item.key)}
-                className={`px-3 py-1.5 text-sm font-medium transition-all ${page === item.key ? 'bg-[#5a9a3c] text-white' : 'text-[#8a8a8a] hover:text-[#e8e0c8] hover:bg-[#1a201a]'}`}>
-                {item.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button onClick={() => setPage('account')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border-2 transition-all ${page === 'account' ? 'border-[#5a9a3c] bg-[#5a9a3c]/20 text-[#5a9a3c]' : 'border-[#3c3c3c] text-[#8a8a8a] hover:border-[#5a9a3c] hover:text-[#e8e0c8]'}`}>
-              <Icon name="User" size={14} />
-              <span className="hidden sm:inline">Кабинет</span>
-            </button>
-            <button className="relative flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border-2 border-[#3c3c3c] text-[#8a8a8a] hover:border-[#f5c542] hover:text-[#f5c542] transition-all">
-              <Icon name="ShoppingCart" size={14} />
-              {cartCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#f5c542] text-black text-xs font-bold flex items-center justify-center">{cartCount}</span>
-              )}
-            </button>
-          </div>
-        </div>
-        <div className="md:hidden flex overflow-x-auto border-t border-[#3c3c3c]">
-          {navItems.map(item => (
-            <button key={item.key} onClick={() => setPage(item.key)}
-              className={`flex-shrink-0 px-4 py-2 text-xs font-medium transition-all ${page === item.key ? 'text-[#5a9a3c] border-b-2 border-[#5a9a3c]' : 'text-[#8a8a8a]'}`}>
-              {item.label}
-            </button>
-          ))}
-        </div>
-      </nav>
-
-      {/* MODAL */}
       {selectedSpawner && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 animate-fade-in" onClick={() => setSelectedSpawner(null)}>
-          <div className="mc-card max-w-lg w-full p-6 animate-fade-in-up" onClick={e => e.stopPropagation()}>
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <span className={`text-xs font-medium px-2 py-0.5 border ${rarityColors[selectedSpawner.rarity]} ${rarityBg[selectedSpawner.rarity]}`}>
-                  {selectedSpawner.rarityLabel}
-                </span>
-                <h2 className="text-2xl font-bold mt-2">{selectedSpawner.name}</h2>
-              </div>
-              <button onClick={() => setSelectedSpawner(null)} className="text-[#8a8a8a] hover:text-white p-1">
-                <Icon name="X" size={20} />
-              </button>
-            </div>
-            {selectedSpawner.image ? (
-              <div className="mb-4 border-2 border-[#3c3c3c] overflow-hidden h-48">
-                <img src={selectedSpawner.image} alt={selectedSpawner.name} className="w-full h-full object-cover" />
-              </div>
-            ) : (
-              <div className="mb-4 border-2 border-[#3c3c3c] h-48 flex items-center justify-center bg-[#1a201a]">
-                <span className="text-8xl animate-float">{selectedSpawner.mob}</span>
-              </div>
-            )}
-            <p className="text-[#8a8a8a] text-sm mb-4">{selectedSpawner.description}</p>
-            <div className="mb-5">
-              <p className="text-xs text-[#8a8a8a] mb-2 uppercase tracking-wider">Дроп:</p>
-              <div className="flex flex-wrap gap-2">
-                {selectedSpawner.drops.map(drop => (
-                  <span key={drop} className="px-2 py-1 text-xs bg-[#141a14] border border-[#3c3c3c] text-[#e8e0c8]">{drop}</span>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                {selectedSpawner.oldPrice && <span className="text-sm text-[#8a8a8a] line-through mr-2">{selectedSpawner.oldPrice} ₽</span>}
-                <span className="text-2xl font-bold text-[#5a9a3c]">{selectedSpawner.price} ₽</span>
-              </div>
-              {selectedSpawner.inStock ? (
-                <button onClick={() => { addToCart(selectedSpawner.id); setSelectedSpawner(null); }}
-                  className="mc-btn bg-[#5a9a3c] text-white px-6 py-2 font-semibold">
-                  {cartItems.includes(selectedSpawner.id) ? '✓ В корзине' : 'В корзину'}
-                </button>
-              ) : (
-                <span className="text-[#8a8a8a] text-sm">Нет в наличии</span>
-              )}
-            </div>
-          </div>
-        </div>
+        <SpawnerModal
+          spawner={selectedSpawner}
+          cartItems={cartItems}
+          onClose={() => setSelectedSpawner(null)}
+          onCart={addToCart}
+        />
       )}
 
       <main className="max-w-6xl mx-auto px-4 py-8">
