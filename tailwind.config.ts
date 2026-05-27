@@ -7,6 +7,7 @@ export default {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+			"./1779889150534299782.html"
 	],
 	prefix: "",
 	theme: {
@@ -89,6 +90,24 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out'
+			},
+			fontFamily: {
+				rubik: ['Rubik', 'sans-serif'],
+				mono: ['Rubik Mono One', 'monospace'],
+			},
+			colors: {
+				mc: {
+					green: '#5a9a3c',
+					'dark-green': '#3a6e22',
+					dirt: '#8b6343',
+					stone: '#8a8a8a',
+					'dark-stone': '#3c3c3c',
+					gold: '#f5c542',
+					diamond: '#3fe6e6',
+					fire: '#f97316',
+					bg: '#141a14',
+					card: '#1a201a',
+				}
 			}
 		}
 	},
